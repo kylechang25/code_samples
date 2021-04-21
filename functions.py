@@ -5,8 +5,6 @@ This file stores all functions used in relative_age_effect.py, salary_prediction
 import logging as LOGGER
 LOGGER.getLogger().setLevel(LOGGER.INFO)
 
-print("hello")
-
 def calculate_quarter(birthday=""):
     '''
     Determines the quarter in which a player was born in given their birthday.
