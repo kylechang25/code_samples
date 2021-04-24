@@ -1,70 +1,66 @@
 """
 This file attempts to predict player salaries based on various statistics from NHL.com using linear regression.
 
+To summarize the methodology: this script will take the statistics of every skater's *signing* year and then
+stats models will perform a linear regression to predict salary.
+
+We are taking the signing year statistics rather than current year statistics because the player's season immediately
+before signing has a greater impact on salary (sure, there are exceptions due to injury, etc.)
+
+In particular, to simplify the model and improve accuracy, we will take the statistics from the most recent 82 game
+season. This means if a player was signed in 2013 (lockout), we will use their 2011-12 totals 2012-13.
+For the 2019-20 and 2020-21 seasons, we will use the 2018-19 data.
+
 Resources:
 https://stackoverflow.com/questions/10556048/how-to-extract-tables-from-websites-in-python
 https://www.khanacademy.org/math/ap-statistics/inference-slope-linear-regression/inference-slope/v/t-statistic-slope
 """
 
-#
+# Imports
+import logging as LOGGER
 import requests
 import numpy as np
 import pandas as pd
+
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 from statsmodels.tools.eval_measures import meanabs
 
+# Setup
+pd.options.display.max_rows = 500
+pd.options.display.max_columns = 500
+LOGGER.getLogger().setLevel(LOGGER.INFO)
+
+# Configurations
+SALARY_URL = 'https://www.spotrac.com/nhl/contracts/sort-value/limit-1690/'
 
 # Create a handle, page, to handle the contents of the website
-url = 'https://www.spotrac.com/nhl/contracts/sort-value/limit-1690/'
-html = requests.get(url).content
-df_list = pd.read_html(html)
-nhl_salaries = df_list[-1]
+html = requests.get(SALARY_URL).content
+salaries_list = pd.read_html(html)
+salaries_df = salaries_list[-1]
+LOGGER
 
-# Calculate signing year
-signing_years = []
-i = 0
+"""
+First we identify the player's signing year.
 
-while i < nhl_salaries['Yrs'].size:
-    fa_date = nhl_salaries['Player'][i].split("(")[1][4:8]
-    if "0)" in fa_date:
-        fa_date = 2020
-    fa_date = int(fa_date)
-    signing_year = fa_date - nhl_salaries['Yrs'][i]
-    signing_years.append(signing_year)
-    i = i + 1
+Note that the "Player" column in salaries_df has the following format:
+"FIRSTNAME LASTNAME POSITION | SIGNINGYEAR-YYYY (FA: YYYY)"
+We want to grab SIGNINGYEAR for every player.
 
-signing_years_array = np.array(signing_years)
-nhl_salaries['Year Signed'] = pd.Series(signing_years_array)
+To do this, we use the following methodology:
+1) Split the string by '-', which produces a list. Note this list does not necessarily have a length of 2 because there
+can be dashes in the player's name (ie. Oliver Ekman-Larsson)
+2) Take the second last element in the list because it will contain the signing year. We do this by slicing [-2,:-1]
+This step returns a single element list. To only grab the string within the list, we write [0]
+3) Take the last 4 characters of the list with [-4:0] and this will return the year.
+"""
 
-# Clean age column
-players = []
-i = 0
+salaries_df['Signing Year'] = salaries_df['Player'].apply(lambda info: (((info.split('-'))[-2:-1])[0])[-4:])
 
-while i < nhl_salaries['Yrs'].size:
-    first_name = nhl_salaries['Player'][i].split(" ")[0]
-    last_name = nhl_salaries['Player'][i].split(" ")[1]
-    name = first_name + " " + last_name
-    players.append(name)
-    i = i + 1
+# Replace the player column with only the player's first and last name.
+salaries_df['Player'] = salaries_df['Player'].apply(lambda info: (info.split(" "))[0] + " " + (info.split(" "))[1])
 
-players_array = np.array(players)
-nhl_salaries['Player'] = pd.Series(players_array)
-
-sum0 = pd.read_excel("Sum0 19-20.xlsx")
-sum1 = pd.read_excel("Sum1 19-20.xlsx")
-sum2 = pd.read_excel("Sum2 19-20.xlsx")
-sum3 = pd.read_excel("Sum3 19-20.xlsx")
-sum4 = pd.read_excel("Sum4 19-20.xlsx")
-sum5 = pd.read_excel("Sum5 19-20.xlsx")
-sum6 = pd.read_excel("Sum6 19-20.xlsx")
-sum7 = pd.read_excel("Sum7 19-20.xlsx")
-sum8 = pd.read_excel("Sum8 19-20.xlsx")
-
-nhl_summary = pd.concat([sum0, sum1, sum2, sum3, sum4, sum5, sum6,
-                         sum7, sum8])
-
-nhl_data = pd.merge(nhl_salaries, nhl_summary, on='Player')
+nhl_data = pd.merge(salaries_df, nhl_summary, on='Player')
 nhl_data = nhl_data.drop_duplicates(subset='Player', keep='first',
                                     inplace=False)
 nhl_data = nhl_data.reset_index()

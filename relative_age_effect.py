@@ -7,8 +7,6 @@ This file creates multiple histograms to show how RAE impacts the number of play
 
 # Imports
 import logging as LOGGER
-LOGGER.getLogger().setLevel(LOGGER.INFO)
-import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,9 +15,13 @@ import matplotlib.pyplot as plt3
 import matplotlib.pyplot as plt4
 from functions import calculate_quarter, calculate_ppg_by_qtr_yr
 
+# Setup
+pd.options.display.max_rows = 500
+pd.options.display.max_columns = 500
+LOGGER.getLogger().setLevel(LOGGER.INFO)
+
 # Configurations
-FILE_NAME = "Bio Info.xlsx"
-DATA_FILE = "Data/Bio Info.xlsx"  # all data as of May 4, 2020
+FILE_NAME = "Data/Bio Info.xlsx"  # all data as of May 4, 2020
 MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"]
 BIRTH_YEARS = [1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989,
                1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001]
