@@ -4,6 +4,7 @@ Test
 """
 
 import logging as LOGGER
+import pandas as pd
 LOGGER.getLogger().setLevel(LOGGER.INFO)
 
 
@@ -70,3 +71,20 @@ def calculate_ppg_by_qtr_yr(bio_info, year_range, qtr):
 
     LOGGER.info(f"List of points per game for {qtr}: {qtr_ppg_list}")
     return qtr_ppg_list
+
+
+def create_summary_df(year):
+    summary1 = pd.read_excel(f"Data/{year}Summary1.xlsx")
+    summary2 = pd.read_excel(f"Data/{year}Summary2.xlsx")
+    summary3 = pd.read_excel(f"Data/{year}Summary3.xlsx")
+    summary4 = pd.read_excel(f"Data/{year}Summary4.xlsx")
+    summary5 = pd.read_excel(f"Data/{year}Summary5.xlsx")
+    summary6 = pd.read_excel(f"Data/{year}Summary6.xlsx")
+    summary7 = pd.read_excel(f"Data/{year}Summary7.xlsx")
+    summary8 = pd.read_excel(f"Data/{year}Summary8.xlsx")
+    summary9 = pd.read_excel(f"Data/{year}Summary9.xlsx")
+
+    output_df = pd.concat([summary1, summary2, summary3, summary4, summary5, summary6, summary7, summary8, summary9])
+    output_df.drop_duplicates(subset='Player', keep='first', inplace=True)
+    output_df.reset_index(inplace=True)
+    return output_df

@@ -143,7 +143,7 @@ LOGGER.info("Created third bar graph with labels")
 PART 4: Points per game of active players born in each quarter by year.#################################################
 """
 
-# calculate quarter defined in functions.py
+# Calculate a player's birth quarter and year. calculate_quarter is defined in functions.py
 bio_info['Birth Quarter'] = bio_info['DOB'].apply(lambda dob: calculate_quarter(dob))
 bio_info['Birth Year'] = bio_info['DOB'].apply(lambda dob: int(dob[0:4]))
 

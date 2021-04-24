@@ -22,6 +22,7 @@ import requests
 import numpy as np
 import pandas as pd
 
+from functions import create_summary_df
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 from statsmodels.tools.eval_measures import meanabs
@@ -59,6 +60,18 @@ salaries_df['Signing Year'] = salaries_df['Player'].apply(lambda info: (((info.s
 
 # Replace the player column with only the player's first and last name.
 salaries_df['Player'] = salaries_df['Player'].apply(lambda info: (info.split(" "))[0] + " " + (info.split(" "))[1])
+
+stats_08_df = pd.read_excel("Data/08Summary.xlsx")
+stats_10_df = pd.read_excel("Data/10Summary.xlsx")
+stats_11_df = pd.read_excel("Data/11Summary.xlsx")
+stats_12_df = create_summary_df('12')
+stats_14_df = create_summary_df('14')
+stats_15_df = create_summary_df('15')
+stats_16_df = create_summary_df('16')
+stats_17_df = create_summary_df('17')
+stats_18_df = create_summary_df('18')
+stats_19_df = create_summary_df('19')
+
 
 nhl_data = pd.merge(salaries_df, nhl_summary, on='Player')
 nhl_data = nhl_data.drop_duplicates(subset='Player', keep='first',
