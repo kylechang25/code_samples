@@ -95,12 +95,3 @@ def create_summary_df(year):
     output_df.reset_index(inplace=True)
     output_df['Year'] = int(f"20{year}")
     return output_df
-
-def clean_aav(aav_str):
-    '''
-
-    :param aav_str:
-    :return:
-    '''
-    AAV = int("".join(aav_str.strip("$").split(",")))
-    AAV = int("".join(AAV))
