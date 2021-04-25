@@ -5,6 +5,7 @@ Test
 
 import logging as LOGGER
 import pandas as pd
+
 LOGGER.getLogger().setLevel(LOGGER.INFO)
 
 
@@ -74,6 +75,11 @@ def calculate_ppg_by_qtr_yr(bio_info, year_range, qtr):
 
 
 def create_summary_df(year):
+    '''
+    Produces a single dataframe from 9 different Excel files that contain player statistics for the same season
+    :param year (str): a two digit string in the form 'YY' indicating the corresponding NHL season for the stats
+    :return: a dataframe with all stats in year
+    '''
     summary1 = pd.read_excel(f"Data/{year}Summary1.xlsx")
     summary2 = pd.read_excel(f"Data/{year}Summary2.xlsx")
     summary3 = pd.read_excel(f"Data/{year}Summary3.xlsx")
@@ -87,4 +93,14 @@ def create_summary_df(year):
     output_df = pd.concat([summary1, summary2, summary3, summary4, summary5, summary6, summary7, summary8, summary9])
     output_df.drop_duplicates(subset='Player', keep='first', inplace=True)
     output_df.reset_index(inplace=True)
+    output_df['Year'] = int(f"20{year}")
     return output_df
+
+def clean_aav(aav_str):
+    '''
+
+    :param aav_str:
+    :return:
+    '''
+    AAV = int("".join(aav_str.strip("$").split(",")))
+    AAV = int("".join(AAV))
