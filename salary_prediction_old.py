@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-DO NOT RUN. It won't work.
+DO NOT RUN. IT WON'T COMPILE.
 
 This code is the old version of salary_prediction.py.
 Its purpose is to solely illustrate the progress I've made as a coder in the past year.

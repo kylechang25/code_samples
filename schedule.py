@@ -53,7 +53,7 @@ def non_overlapping_games(T1, T2, url1, url2):
     :param T2 (str): 3 letter abbreviation of second team
     :param url1 (str): url for the first team's schedule
     :param url2 (str): url for the second team's schedule
-    :return (int): number of non overlapping games
+    :return: integer representing the number of non overlapping games
     '''
     # grab the schedules from the two teams
     T1url = url1

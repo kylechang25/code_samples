@@ -1,11 +1,11 @@
 """
 This file attempts to predict player salaries based on various statistics from NHL.com using linear regression.
 
-To summarize the methodology: this script will take the statistics of every skater's *signing* year and then
+To summarize the methodology: this script takes the statistics of every skater's *signing* year and then
 statsmodels will perform a linear regression to predict salary.
 
-To simplify the model and improve accuracy, we will take the statistics from the most recent 82 game
-season. This means if a player was signed in 2013 (lockout shortened year), we will use their 2011-12 totals.
+To simplify the model, we will take the statistics from the most recent 82 game season.
+This means if a player was signed in 2013 (lockout shortened year), we will use their 2011-12 totals.
 For the 2019-20 and 2020-21 seasons, we will use the player's 2018-19 data.
 """
 

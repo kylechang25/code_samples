@@ -1,6 +1,5 @@
 """
 This file stores all functions used in relative_age_effect.py, salary_prediction.py, fantasy_goalies.py
-Test
 """
 
 import logging as LOGGER

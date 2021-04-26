@@ -2,7 +2,7 @@
 The Relative Age Effect (RAE) describes the “the phenomenon by which children born early in their year of birth perform
 more highly than children born later in the same cohort”.
 
-This file creates multiple histograms to show how RAE impacts the number of players in the NHL and their performance.
+This file creates multiple histograms to determine if RAE impacts the number of players in the NHL and their PPG.
 """
 
 # Imports
